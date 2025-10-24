@@ -6,6 +6,13 @@ use Illuminate\Http\Request; use Illuminate\Support\Str; use Illuminate\Support\
 
 class OrderController extends Controller
 {
+    public function index(){
+        $orders = Order::where('user_id', auth()->id())
+            ->latest('placed_at')
+            ->paginate(10);
+        return view('orders.index', compact('orders'));
+    }
+
     public function store(Request $r){
         $data = $r->validate([
         'product_id'=>'required|exists:products,id',
